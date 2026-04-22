@@ -19,6 +19,6 @@ let mut sess = Session::new().unwrap();
 sess.set_tcp_stream(tcp);
 sess.handshake().unwrap();
 
-sess.userauth_password("ziggysquatch", "zc2379").unwrap();
+sess.userauth_password("ziggysquatch", "").unwrap();
 assert!(sess.authenticated());
 }
