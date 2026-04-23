@@ -1,24 +1,17 @@
-use std::net::TcpStream;
-use ssh2::Session;
-use std::io;
+use std::env;
+use std::process;
+use accessh::Config;
+use accessh::get_connected;
 
 fn main() {
-    println!("Please input host: ");
-    let mut host = String::new();
-    
-    io::stdin()
-        .read_line(&mut host)
-        .expect("Failed to read line");
+    let args: Vec<String> = env::args().collect();
 
+    let config = Config::build(&args).unwrap_or_else(|err| {
+        println!("Problem parsing arguments: {err}");
+        process::exit(1);
+    });
+    get_connected(config);
 
-let connection = [&host.trim(),":22"].concat();
-println!("{connection}");
-// Connect to the local SSH server
-let tcp = TcpStream::connect(&connection).unwrap();
-let mut sess = Session::new().unwrap();
-sess.set_tcp_stream(tcp);
-sess.handshake().unwrap();
-
-sess.userauth_password("ziggysquatch", "").unwrap();
-assert!(sess.authenticated());
 }
+
+
